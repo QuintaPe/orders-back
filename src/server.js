@@ -19,10 +19,8 @@ initializeWebSocket(server);
 console.log(process.env.FRONTEND_URL);
 // Middleware
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-    credentials: true, // Importante para cookies
-    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+    origin: '*',
+    credentials: true,
 }));
 app.use(express.json());
 app.use(cookieParser());
