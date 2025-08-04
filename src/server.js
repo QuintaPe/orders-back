@@ -25,6 +25,24 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
+// Health check endpoint for Render
+app.get('/health', (req, res) => {
+    res.status(200).json({
+        status: 'OK',
+        message: 'Server is running',
+        timestamp: new Date().toISOString()
+    });
+});
+
+// Root endpoint
+app.get('/', (req, res) => {
+    res.json({
+        message: 'Bar QR Backend API',
+        version: '1.0.0',
+        websocket: 'Available'
+    });
+});
+
 // Public routes (no authentication required)
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
@@ -42,7 +60,9 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+server.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on port ${PORT}`);
+    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
     console.log(`WebSocket server ready for connections`);
+    console.log(`Health check available at /health`);
 });

@@ -3,12 +3,23 @@ import { Server } from 'socket.io';
 let io;
 
 export const initializeWebSocket = (server) => {
+    // Configuración dinámica de CORS para producción
+    const corsOptions = {
+        origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+        methods: ['GET', 'POST'],
+        credentials: true,
+        allowedHeaders: ['Content-Type', 'Authorization']
+    };
+
+    // Si estamos en producción y no hay FRONTEND_URL específico, permitir múltiples orígenes
+    if (process.env.NODE_ENV === 'production' && !process.env.FRONTEND_URL) {
+        corsOptions.origin = true; // Permitir cualquier origen en producción
+    }
+
     io = new Server(server, {
-        cors: {
-            origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-            methods: ['GET', 'POST'],
-            credentials: true
-        }
+        cors: corsOptions,
+        transports: ['websocket', 'polling'], // Soporte para fallback
+        allowEIO3: true // Compatibilidad con versiones anteriores
     });
 
     io.on('connection', (socket) => {
