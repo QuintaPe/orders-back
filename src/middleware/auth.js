@@ -66,6 +66,7 @@ export const requireRole = (roles) => {
 // Función para establecer la cookie de autenticación
 export const setAuthCookie = (res, token) => {
     res.cookie('authToken', token, {
+        domain: process.env.NODE_ENV === 'production' ? process.env.COOKIE_DOMAIN : undefined,
         httpOnly: true, // Previene acceso desde JavaScript
         secure: process.env.NODE_ENV === 'production', // Solo HTTPS en producción
         sameSite: 'strict', // Protección CSRF

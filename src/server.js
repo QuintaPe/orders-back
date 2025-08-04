@@ -16,7 +16,7 @@ const server = http.createServer(app);
 
 // Inicializar WebSocket
 initializeWebSocket(server);
-
+console.log(process.env.FRONTEND_URL);
 // Middleware
 app.use(cors({
     origin: process.env.FRONTEND_URL || 'http://localhost:5173',
